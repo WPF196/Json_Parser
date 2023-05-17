@@ -1,4 +1,6 @@
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "json.h"
 #include "parser.h"
 
@@ -6,22 +8,19 @@ using namespace std;
 using namespace JP::Json;
 
 int main(){
-    Json arr;
-    arr.append(true);
-    arr.append(1);
-    arr.append("abc");
+    ifstream fin("./test.json");
+    stringstream ss;
 
-    Json obj;
-    obj["lbj"] = "win1";
-    obj["ad"] = "win2";
-    obj["rv"] = "win3";
-    obj["vb"] = "win4";
-
-    cout << arr.str() << endl;
-
-    // 只释放obj即可，因为浅拷贝
-    // arr的内存会自动转移到obj的内存
-    obj.clear();    
+    ss << fin.rdbuf();
+    const string& str = ss.str();
     
+    Json v;
+    v.parse(str);
+
+    bool isLogin = v["data"]["isLogin"];
+    int current_level = v["data"]["level_info"]["current_level"];
+    string uname = v["data"]["uname"];
+
+    cout << v.str() << endl;
     return 0;
 }

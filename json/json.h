@@ -73,6 +73,7 @@ public:
     void copy(const Json&);             // type的switch
     void clear();                       // 释放内存
     string str() const;                 // 返回json的内容
+    void parse(const string&);          // 调用解析器
     
     // 数组迭代器
     typedef vector<Json>::iterator iterator;

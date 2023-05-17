@@ -1,4 +1,5 @@
 #include "json.h"
+#include "parser.h"
 #include <sstream>
 
 using namespace JP::Json;
@@ -79,7 +80,7 @@ Json::operator string(){
 
 
 // 数据类型转换（显性）--------------------------------------------------
-bool Json::asBool() const{
+bool Json::asBool() const{   // json.asBool(v2);
     if (m_type == json_bool)
         return m_value.m_bool;
     throw std::logic_error("function Json::asBool value type error");
@@ -103,10 +104,9 @@ string Json::asString() const{
 
 // 操作符重载-----------------------------------------------------------
 Json & Json::operator [] (int index){
-    if(m_type != json_array){
-        m_type = json_array;
+    if(m_type != json_array)
         throw logic_error("type error, not array\n");
-    }
+    
     if(index < 0 || index >= m_value.m_array->size())
         throw logic_error("index error\n");
     return (*(m_value.m_array))[index];
@@ -309,4 +309,10 @@ string Json::str() const{
             break;
     }
     return ss.str();
+}
+
+void Json::parse(const string& str){
+    Parser p;
+    p.load(str);
+    *this = p.parse();
 }
